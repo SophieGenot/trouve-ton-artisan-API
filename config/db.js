@@ -1,10 +1,8 @@
-const express = require('express');
+// config/db.js
 const { Sequelize } = require('sequelize');
 require('dotenv').config({
-  path:  './env/.env.dev'
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev'
 });
-
-const app = express();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -17,5 +15,4 @@ const sequelize = new Sequelize(
   }
 );
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = sequelize;
