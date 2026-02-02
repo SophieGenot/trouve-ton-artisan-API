@@ -24,6 +24,7 @@ const sequelize = new Sequelize(
   }
 );
 
+const { Categorie, Specialite, Artisans } = require('./models');
 // Routes Artisan
 const artisanRoutes = require('./routes/artisan.route');
 app.use('/api/artisans', artisanRoutes);

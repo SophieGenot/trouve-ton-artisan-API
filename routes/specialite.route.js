@@ -4,7 +4,7 @@ const Specialite = require('../models/Specialite');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
 // Lister toutes les spécialités (public)
-router.get('/', async (req, res) => {
+router.get('/simple', async (req, res) => {
   try {
     const specialites = await Specialite.findAll();
     res.json(specialites);
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 // GET une spécialité par ID (public)
 router.get('/:id', async (req, res) => {
   try {
-    const specialite = await Specialite.findOne({
+    const specialite = await Specialite.findByPk({
       where: { id_specialite: req.params.id }
     });
     if (!specialite) {
@@ -28,8 +28,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Créer une spécialité (protégé)
+// POST créer une spécialité
 router.post('/', apiKeyAuth, async (req, res) => {
+  const { nom_specialite, id_categorie } = req.body;
+
+  if (!nom_specialite || !id_categorie) {
+    return res.status(400).json({ error: 'nom_specialite et id_categorie sont obligatoires' });
+  }
+
   try {
     const specialite = await Specialite.create(req.body);
     res.status(201).json(specialite);
@@ -38,15 +44,18 @@ router.post('/', apiKeyAuth, async (req, res) => {
   }
 });
 
-// Modifier une spécialité (protégé)
+// PUT modifier une spécialité
 router.put('/:id', apiKeyAuth, async (req, res) => {
+  const { nom_specialite, id_categorie } = req.body;
+
+  if (!nom_specialite || !id_categorie) {
+    return res.status(400).json({ error: 'nom_specialite et id_categorie sont obligatoires' });
+  }
+
   try {
-    const specialite = await Specialite.findOne({
-      where: { id_specialite: req.params.id }
-    });
-    if (!specialite) {
-      return res.status(404).json({ error: 'Spécialité non trouvée' });
-    }
+    const specialite = await Specialite.findByPk(req.params.id);
+    if (!specialite) return res.status(404).json({ error: 'Spécialité non trouvée' });
+
     await specialite.update(req.body);
     res.json(specialite);
   } catch (err) {
@@ -57,7 +66,7 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
 // Supprimer une spécialité (protégé)
 router.delete('/:id', apiKeyAuth, async (req, res) => {
   try {
-    const specialite = await Specialite.findOne({
+    const specialite = await Specialite.findByPk({
       where: { id_specialite: req.params.id }
     });
     if (!specialite) {
