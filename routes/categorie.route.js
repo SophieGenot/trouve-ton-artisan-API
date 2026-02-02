@@ -1,12 +1,11 @@
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
 const Categorie = require('../models/Categorie');
 const Specialite = require('../models/Specialite');
 const Artisans = require('../models/Artisans');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
-// GET toutes les catégories (public)
-router.get('/simple', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const categories = await Categorie.findAll();
     res.json(categories);
@@ -15,7 +14,6 @@ router.get('/simple', async (req, res) => {
   }
 });
 
-// GET une catégorie par id (public)
 router.get('/:id', async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id);
@@ -28,11 +26,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// GET toutes les spécialités d'une catégorie
 router.get('/:id/specialites', async (req, res) => {
   try {
     const specialites = await Specialite.findAll({
-      where: { categorieId: req.params.id }
+      where: { id_categorie: req.params.id }
     });
     res.json(specialites);
   } catch (err) {
@@ -40,10 +37,8 @@ router.get('/:id/specialites', async (req, res) => {
   }
 });
 
-// POST créer une catégorie
 router.post('/', apiKeyAuth, async (req, res) => {
   const { nom_categorie } = req.body;
-
   if (!nom_categorie) {
     return res.status(400).json({ error: 'nom_categorie est obligatoire' });
   }
@@ -56,10 +51,8 @@ router.post('/', apiKeyAuth, async (req, res) => {
   }
 });
 
-// PUT modifier une catégorie
 router.put('/:id', apiKeyAuth, async (req, res) => {
   const { nom_categorie } = req.body;
-
   if (!nom_categorie) {
     return res.status(400).json({ error: 'nom_categorie est obligatoire' });
   }
@@ -75,13 +68,11 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
   }
 });
 
-// DELETE supprimer une catégorie
 router.delete('/:id', apiKeyAuth, async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id);
-    if (!categorie) {
-      return res.status(404).json({ error: 'Catégorie non trouvée' });
-    }
+    if (!categorie) return res.status(404).json({ error: 'Catégorie non trouvée' });
+
     await categorie.destroy();
     res.json({ message: 'Catégorie supprimée' });
   } catch (err) {
