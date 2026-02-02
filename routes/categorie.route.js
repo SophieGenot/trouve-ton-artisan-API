@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST créer une catégorie (protégé)
+// créer une catégorie (protégé)
 router.post('/', apiKeyAuth, async (req, res) => {
   try {
     const categorie = await Categorie.create(req.body);
@@ -36,7 +36,7 @@ router.post('/', apiKeyAuth, async (req, res) => {
   }
 });
 
-// PUT modifier une catégorie (protégé)
+// modifier une catégorie (protégé)
 router.put('/:id', apiKeyAuth, async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id);
@@ -50,7 +50,7 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
   }
 });
 
-// DELETE supprimer une catégorie (protégé)
+// supprimer une catégorie (protégé)
 router.delete('/:id', apiKeyAuth, async (req, res) => {
   try {
     const categorie = await Categorie.findByPk(req.params.id);

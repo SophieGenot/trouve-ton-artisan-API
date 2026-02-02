@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST créer un artisan
+// créer un artisan (protégé)
 router.post('/', apiKeyAuth, async (req, res) => {
     console.log('POST /api/artisans reçu');
   try {
@@ -37,7 +37,7 @@ router.post('/', apiKeyAuth, async (req, res) => {
   }
 });
 
-// PUT modifier un artisan
+// modifier un artisan (protégé)
 router.put('/:id', apiKeyAuth, async (req, res) => {
     console.log('PUT /api/artisans/:id reçu');
   try {
@@ -50,7 +50,7 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
   }
 });
 
-// DELETE supprimer un artisan
+// supprimer un artisan (protégé)
 router.delete('/:id', apiKeyAuth, async (req, res) => {
     console.log('DELETE /api/artisans/:id reçu');
   try {

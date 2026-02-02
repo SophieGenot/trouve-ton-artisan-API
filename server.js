@@ -32,6 +32,10 @@ app.use('/api/artisans', artisanRoutes);
 const categorieRoutes = require('./routes/categorie.route');
 app.use('/api/categories', categorieRoutes);
 
+// Route Spécialité
+const specialiteRoutes = require('./routes/specialite.route');
+app.use('/api/specialites', specialiteRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
