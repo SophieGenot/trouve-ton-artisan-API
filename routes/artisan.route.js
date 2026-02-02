@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
 
 // POST créer un artisan
 router.post('/', apiKeyAuth, async (req, res) => {
-    console.log('GET /api/artisans reçu');
+    console.log('POST /api/artisans reçu');
   try {
     const newArtisan = await Artisan.create(req.body);
     res.status(201).json(newArtisan);
@@ -39,7 +39,7 @@ router.post('/', apiKeyAuth, async (req, res) => {
 
 // PUT modifier un artisan
 router.put('/:id', apiKeyAuth, async (req, res) => {
-    console.log('GET /api/artisans reçu');
+    console.log('PUT /api/artisans/:id reçu');
   try {
     const artisan = await Artisan.findByPk(req.params.id);
     if (!artisan) return res.status(404).json({ error: 'Artisan non trouvé' });
@@ -52,7 +52,7 @@ router.put('/:id', apiKeyAuth, async (req, res) => {
 
 // DELETE supprimer un artisan
 router.delete('/:id', apiKeyAuth, async (req, res) => {
-    console.log('GET /api/artisans reçu');
+    console.log('DELETE /api/artisans/:id reçu');
   try {
     const artisan = await Artisan.findByPk(req.params.id);
     if (!artisan) return res.status(404).json({ error: 'Artisan non trouvé' });

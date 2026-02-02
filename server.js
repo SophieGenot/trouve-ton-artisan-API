@@ -13,7 +13,6 @@ app.use(cors());
 app.use(express.json());
 app.use(rateLimit({ windowMs: 15*60*1000, max: 100 }));
 
-
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -28,6 +27,11 @@ const sequelize = new Sequelize(
 // Routes Artisan
 const artisanRoutes = require('./routes/artisan.route');
 app.use('/api/artisans', artisanRoutes);
+
+// Route Catégorie
+const categorieRoutes = require('./routes/categorie.route');
+app.use('/api/categories', categorieRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
