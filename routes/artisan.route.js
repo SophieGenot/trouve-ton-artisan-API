@@ -81,4 +81,25 @@ router.delete('/:id', apiKeyAuth, async (req, res) => {
   }
 });
 
+// GET artisans pour les cartes "vedette"
+router.get('/vedette', async (req, res) => {
+  try {
+    const artisans = await Artisan.findAll({
+      where: { top: true }, // uniquement les artisans "top"
+      attributes: ['id_artisan', 'nom', 'note', 'ville', 'photo'], // champs nécessaires pour la carte
+      include: {
+        model: Specialite,
+        as: 'specialite',
+        attributes: ['nom_specialite'] // on ne récupère que le nom de la spécialité
+      }
+    });
+
+    res.json(artisans);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;

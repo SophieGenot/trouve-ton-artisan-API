@@ -14,18 +14,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  try {
-    const categorie = await Categorie.findByPk(req.params.id);
-    if (!categorie) {
-      return res.status(404).json({ error: 'Catégorie non trouvée' });
-    }
-    res.json(categorie);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 router.get('/:id/specialites', async (req, res) => {
   try {
     const specialites = await Specialite.findAll({
