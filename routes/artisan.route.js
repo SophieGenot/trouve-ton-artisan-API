@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Artisan, Specialite, Categorie } = require('../models');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
+const { Op } = require("sequelize");
 
 // GET tous les artisans (liste)
 router.get('/', async (req, res) => {
@@ -36,9 +37,76 @@ router.post('/', apiKeyAuth, async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+// GET artisans pour les cartes "vedette"
+router.get('/top', async (req, res) => {
   try {
-    const artisan = await Artisan.findByPk(req.params.id, {
+    const artisans = await Artisan.findAll({
+      where: { top: true }, // uniquement les artisans "top"
+      attributes: ['id_artisan', 'nom', 'note', 'ville',], // champs nécessaires pour la carte
+      include: {
+        model: Specialite,
+        as: 'specialite',
+        attributes: ['nom_specialite']
+      }
+    });
+
+    res.json(artisans);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/categorie/:id_categorie', async (req, res) => {
+  try {
+    const idCategorie = req.params.id_categorie;
+
+    const artisans = await Artisan.findAll({
+      include: {
+        model: Specialite,
+        as: 'specialite',
+        where: { id_categorie: idCategorie },
+        include: { model: Categorie, as: 'categorie' }
+      },
+      distinct: true,  
+      group: ['Artisan.id_artisan'],
+      order: [['nom', 'ASC']]       
+    });
+
+    res.json(artisans);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/search", async (req, res) => {
+  try {
+    const { nom } = req.query;
+
+    const artisan = await Artisan.findOne({
+      where: {
+        nom: { [Op.like]: `%${nom}%` }
+      },
+      include: {
+        model: Specialite,
+        as: "specialite",
+        include: { model: Categorie, as: "categorie" }
+      }
+    });
+
+    if (!artisan) return res.status(404).json({ error: "Artisan non trouvé" });
+
+    res.json(artisan);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+router.get('/:id_artisan', async (req, res) => {
+  try {
+    const artisan = await Artisan.findByPk(req.params.id_artisan, {
       include: {
         model: Specialite,
         as: 'specialite',
@@ -80,26 +148,5 @@ router.delete('/:id', apiKeyAuth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// GET artisans pour les cartes "vedette"
-router.get('/vedette', async (req, res) => {
-  try {
-    const artisans = await Artisan.findAll({
-      where: { top: true }, // uniquement les artisans "top"
-      attributes: ['id_artisan', 'nom', 'note', 'ville', 'photo'], // champs nécessaires pour la carte
-      include: {
-        model: Specialite,
-        as: 'specialite',
-        attributes: ['nom_specialite'] // on ne récupère que le nom de la spécialité
-      }
-    });
-
-    res.json(artisans);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
 
 module.exports = router;
