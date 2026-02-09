@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const apiKeyAuth = require('../middleware/apiKeyAuth');
-const categorieController = require('../controllers/categorieController');
+const categorieController = require('../controllers/categorie.controller');
 
 // Routes CRUD
 router.get('/', categorieController.getAllCategories);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const specialiteController = require('../controllers/specialiteController');
+const specialiteController = require('../controllers/specialite.controller');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
 // Routes CRUD

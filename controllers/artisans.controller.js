@@ -124,23 +124,35 @@ exports.getArtisansByCategorie = async (req, res) => {
   }
 };
 
-// recherche artisan par nom
+// Recherche artisan par nom
 exports.searchArtisan = async (req, res) => {
   try {
     const { nom } = req.query;
 
-    const artisan = await Artisan.findOne({
-      where: { nom: { [Op.like]: `%${nom}%` } },
+    if (!nom) {
+      return res.status(400).json({ error: 'Paramètre "nom" manquant' });
+    }
+
+    const artisans = await Artisan.findOne({
+      where: {
+        nom: { [Op.like]: `%${nom}%` }
+      },
       include: {
         model: Specialite,
-        as: "specialite",
-        include: { model: Categorie, as: "categorie" }
+        as: 'specialite',
+        include: { model: Categorie, as: 'categorie' }
       }
     });
 
-    if (!artisan) return res.status(404).json({ error: "Artisan non trouvé" });
-    res.json(artisan);
+    if (artisans.length === 0) {
+      return res.status(404).json({ error: 'Aucun artisan trouvé' });
+    }
+
+    res.json(artisans);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
+
+
