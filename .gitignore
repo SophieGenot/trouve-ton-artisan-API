@@ -12,10 +12,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dossier build ou dist (si jamais tu en as)
-dist/
-build/
-
 # MacOS / Windows fichiers système
 .DS_Store
 Thumbs.db
