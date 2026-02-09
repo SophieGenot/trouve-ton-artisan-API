@@ -6,7 +6,7 @@ const artisanController = require('../controllers/artisans.controller');
 // Routes spécifiques fixes
 router.get('/top', artisanController.getTopArtisans);
 router.get('/search', artisanController.searchArtisan);
-router.get('/categorie/:id_categorie', artisanController.getArtisansByCategorie);
+router.get('/by-categorie/:id_categorie', artisanController.getArtisansByCategorie);
 
 router.get('/', artisanController.getAllArtisans);
 router.get('/:id_artisan', artisanController.getArtisanById);
