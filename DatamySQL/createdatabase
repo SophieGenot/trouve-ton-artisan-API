@@ -1,0 +1,32 @@
+  --Création de la base 
+CREATE DATABASE trouve_ton_artisans
+
+--Création table categorie
+create table categorie (
+  id_categorie int not null auto_increment primary key,
+  nom_categorie varchar(50) not null
+);
+
+ 
+  --Création table specialite
+create table specialite (
+  id_specialite int not null auto_increment primary key,
+  nom_specialite varchar(50) not null,
+  id_categorie int not null
+);
+
+  --Création table artisan
+create table artisan (
+  id_artisan int not null auto_increment primary key,
+  nom varchar(100) not null,
+  note decimal(2,1),
+  ville varchar(50),
+  a_propos text,
+  email varchar(100),
+  site_web varchar(255),
+  top tinyint(1),
+  id_specialite int not null,
+  foreign key (id_specialite) references specialite(id_specialite)
+);
+
+ 
