@@ -1,11 +1,11 @@
 const express = require('express');
 const { Sequelize } = require('sequelize');
-require('dotenv').config({ path: './env/.env.dev' });
+require('dotenv').config();
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-
+const { Categorie, Specialite, Artisans } = require('./models');
 const app = express();
 
 // Middleware sécurité
@@ -26,8 +26,6 @@ const sequelize = new Sequelize(
   }
 );
 
-const { Categorie, Specialite, Artisans } = require('./models');
-
 // Routes API
 const artisanRoutes = require('./routes/artisan.route');
 app.use('/api/artisans', artisanRoutes);
@@ -39,9 +37,6 @@ const specialiteRoutes = require('./routes/specialite.route');
 app.use('/api/specialites', specialiteRoutes);
 
 // SERVIR LE FRONTEND
-
-const path = require('path');
-
 app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
 app.get('*', (req, res) => {
