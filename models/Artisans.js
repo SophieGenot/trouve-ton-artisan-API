@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); 
 
-const Artisan = sequelize.define('Artisan', {
+const Artisan = sequelize.define('artisan', {
   id_artisan: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -16,7 +16,7 @@ const Artisan = sequelize.define('Artisan', {
   top: { type: DataTypes.BOOLEAN, defaultValue: false },
   id_specialite: { type: DataTypes.INTEGER, allowNull: true }
 }, {
-  tableName: 'Artisan',
+  tableName: 'artisan',
   timestamps: false
 });
 

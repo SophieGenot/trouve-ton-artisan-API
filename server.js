@@ -21,10 +21,18 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
     logging: false
   }
 );
+
+sequelize.authenticate()
+  .then(() => console.log('✅ DB connected'))
+  .catch(err => {
+    console.error('❌ DB connection error:', err);
+    process.exit(1); // stoppe le serveur si erreur
+  });
 
 // Routes API
 const artisanRoutes = require('./routes/artisan.route');
