@@ -113,7 +113,7 @@ exports.getArtisansByCategorie = async (req, res) => {
         include: { model: Categorie, as: 'categorie' }
       },
       distinct: true,
-      group: ['Artisan.id_artisan'],
+      group: ['id_artisan'],
       order: [['nom', 'ASC']]
     });
 
@@ -133,7 +133,7 @@ exports.searchArtisan = async (req, res) => {
       return res.status(400).json({ error: 'Paramètre "nom" manquant' });
     }
 
-    const artisans = await Artisan.findOne({
+    const artisans = await Artisan.findAll({
       where: {
         nom: { [Op.like]: `%${nom}%` }
       },
