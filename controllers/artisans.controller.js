@@ -55,7 +55,7 @@ exports.createArtisan = async (req, res) => {
 // modifier un artisan
 exports.updateArtisan = async (req, res) => {
   try {
-    const artisan = await Artisan.findByPk(req.params.id);
+    const artisan = await Artisan.findByPk(req.params.id_artisan);
     if (!artisan) return res.status(404).json({ error: 'Artisan non trouvé' });
 
     await artisan.update(req.body);
@@ -69,7 +69,7 @@ exports.updateArtisan = async (req, res) => {
 // supprimer un artisan
 exports.deleteArtisan = async (req, res) => {
   try {
-    const artisan = await Artisan.findByPk(req.params.id);
+    const artisan = await Artisan.findByPk(req.params.id_artisan);
     if (!artisan) return res.status(404).json({ error: 'Artisan non trouvé' });
 
     await artisan.destroy();
@@ -113,7 +113,7 @@ exports.getArtisansByCategorie = async (req, res) => {
         include: { model: Categorie, as: 'categorie' }
       },
       distinct: true,
-      group: ['id_artisan'],
+      group: ['artisan.id_artisan'],
       order: [['nom', 'ASC']]
     });
 
@@ -133,7 +133,7 @@ exports.searchArtisan = async (req, res) => {
       return res.status(400).json({ error: 'Paramètre "nom" manquant' });
     }
 
-    const artisans = await Artisan.findAll({
+    const artisan = await Artisan.findOne({
       where: {
         nom: { [Op.like]: `%${nom}%` }
       },
@@ -141,14 +141,15 @@ exports.searchArtisan = async (req, res) => {
         model: Specialite,
         as: 'specialite',
         include: { model: Categorie, as: 'categorie' }
-      }
+      },
+      order: [['nom', 'ASC']]
     });
 
-    if (artisans.length === 0) {
+    if (!artisan) {
       return res.status(404).json({ error: 'Aucun artisan trouvé' });
     }
 
-    res.json(artisans);
+    res.json(artisan);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

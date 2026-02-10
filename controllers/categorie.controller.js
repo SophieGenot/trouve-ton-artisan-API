@@ -15,9 +15,12 @@ exports.getAllCategories = async (req, res) => {
 // GET toutes les spécialités d'une catégorie
 exports.getSpecialitesByCategorie = async (req, res) => {
   try {
+    const { id_categorie } = req.params;
+
     const specialites = await Specialite.findAll({
-      where: { id_categorie: req.params.id }
+      where: { id_categorie }
     });
+
     res.json(specialites);
   } catch (err) {
     console.error(err);
